@@ -53,12 +53,11 @@ shared(initralizer) actor class PictureBed(owner: [Principal]) = this{
 
     public shared({caller}) func addowner(newowner: Principal): async Bool {
         if(TrieSet.mem<Principal>(admin, caller, Principal.hash(caller), Principal.equal) == false) return false;
-        admin := TrieSet.put<Principal>(admin, caller, Principal.hash(newowner), Principal.equal);
+        admin := TrieSet.put<Principal>(admin, newowner, Principal.hash(newowner), Principal.equal);
         true
     };
 
     public query({caller}) func getImg(key: Text) : async Result.Result<[Blob], Error>{
-        if(TrieSet.mem<Principal>(admin, caller, Principal.hash(caller), Principal.equal) == false) return #err(#NotAdmin);
         switch(bucket.get(key)){
             case(#err(e)){ #err(e) };
             case(#ok(blob)){
